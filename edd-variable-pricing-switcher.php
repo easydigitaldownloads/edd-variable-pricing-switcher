@@ -20,6 +20,7 @@ class EDD_Variable_Pricing_Switcher {
 
 	public function __construct() {
 		add_filter( 'edd_settings_extensions', array( $this, 'settings' ), 1 );
+		add_filter( 'edd_get_template_part', array( $this, 'filter_checkout_cart' ) );
 		add_action( 'init', array( $this, 'catch_post' ), 11 );
 		add_action( 'init', array( $this, 'force_single_product' ), 10 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -27,7 +28,6 @@ class EDD_Variable_Pricing_Switcher {
 	}
 
 	public function settings( $settings ) {
-
 		$vps_settings = array(
 			array(
 				'id' => 'vps_settings',
@@ -59,6 +59,17 @@ class EDD_Variable_Pricing_Switcher {
   	return array_merge( $settings, $vps_settings );
 	}
 
+	public function filter_checkout_cart( $templates, $slug, $name ) {
+		global $edd_options;
+
+		if( isset( $edd_options[ 'vps_disable_cart' ] ) && $edd_options[ 'vps_disable_cart' ] == '1' ) {
+			if( in_array(  'checkout_cart.php', $templates ) )
+				return array();
+		}
+
+		return $templates;
+	}
+
 	public function force_single_product() {
 		global $edd_options;
 
@@ -73,14 +84,12 @@ class EDD_Variable_Pricing_Switcher {
 	}
 
 	public function catch_post() {
-
 		// If Variable pricing switch post is set, switch to post option of first (should be only) product.
 		if( isset( $_POST[ 'edd-variable-pricing-switcher' ] ) ) {
 			$product = array_shift( edd_get_cart_contents() );
 			$product[ 'options' ][ 'price_id' ] = $_POST[ 'edd-variable-pricing-switcher' ]; // Make this more secure, can we check if this is a valid pricing option?
 			EDD()->session->set( 'edd_cart', array( $product ) );
 		}
-
 	}
 
 	public function enqueue_scripts() {
@@ -95,10 +104,6 @@ class EDD_Variable_Pricing_Switcher {
 
 	public function pricing_switcher() {
 		global $edd_options, $user_ID, $post;
-
-		echo '<pre>';
-			print_r( $edd_options );
-		echo '</pre>';
 
 		// Get first item of cart - this plugin only works for 1 product webshops
 		$product = array_shift( edd_get_cart_contents() );
