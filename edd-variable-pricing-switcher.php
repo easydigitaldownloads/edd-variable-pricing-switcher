@@ -21,6 +21,11 @@ require_once( EDD_VPS_PLUGIN_DIR . '/includes/metabox.php' );
 class EDD_Variable_Pricing_Switcher {
 
 	public function __construct() {
+
+		// Load plugin textdomain
+		load_plugin_textdomain( 'edd-vps', false, dirname( plugin_basename( EDD_VPS_PLUGIN_FILE ) ) . '/languages/' );
+
+		// Filters & Hooks
 		add_filter( 'edd_settings_extensions', array( $this, 'settings' ), 1 );
 		add_filter( 'edd_get_template_part', array( $this, 'filter_checkout_cart' ) );
 		add_action( 'init', array( $this, 'catch_post' ), 11 );
