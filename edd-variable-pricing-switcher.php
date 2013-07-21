@@ -22,7 +22,7 @@ class EDD_Variable_Pricing_Switcher {
 		add_filter( 'edd_settings_extensions', array( $this, 'settings' ), 1 );
 		add_filter( 'edd_get_template_part', array( $this, 'filter_checkout_cart' ) );
 		add_action( 'init', array( $this, 'catch_post' ), 11 );
-		add_action( 'init', array( $this, 'force_single_product' ), 10 );
+		add_action( 'init', array( $this, 'force_single_variable_price' ), 10 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'edd_checkout_form_top', array( $this, 'pricing_switcher' ) );
 	}
@@ -49,9 +49,9 @@ class EDD_Variable_Pricing_Switcher {
 				'type' => 'checkbox'
 			),
 			array(
-				'id' => 'vps_force_single_product',
-				'name' => __('Force single product', 'edd'),
-				'desc' => __('Check this to only allow 1 product and 1 variable pricing to be bought at once.', 'edd-vps'),
+				'id' => 'vps_force_single_variable_price',
+				'name' => __('Force single variable price', 'edd'),
+				'desc' => __('Check this to only allow 1 variable price per product to be bought at once.', 'edd-vps'),
 				'type' => 'checkbox'
 			),
 		);
@@ -70,17 +70,23 @@ class EDD_Variable_Pricing_Switcher {
 		return $templates;
 	}
 
-	public function force_single_product() {
+	public function force_single_variable_price() {
 		global $edd_options;
 
-		if( isset( $edd_options[ 'vps_force_single_product' ] ) && $edd_options[ 'vps_force_single_product' ] == '1' ) {
+		if( isset( $edd_options[ 'vps_force_single_variable_price' ] ) && $edd_options[ 'vps_force_single_variable_price' ] == '1' ) {
 			$cart = edd_get_cart_contents();
 			if( count( $cart ) > 1 ) {
+
+				$temp_cart = array();
+				foreach( $cart as $cart_item ) {
+					$temp_cart[ $cart_item[ 'id' ] ] = $cart_item;
+				}
+				$cart = array_values( $temp_cart );
+
 				// Use the one that's added last
-				EDD()->session->set( 'edd_cart', array( array_pop( $cart ) ) );
+				EDD()->session->set( 'edd_cart', $cart );
 			}
 		}
-
 	}
 
 	public function catch_post() {
