@@ -92,9 +92,16 @@ class EDD_Variable_Pricing_Switcher {
 	public function catch_post() {
 		// If Variable pricing switch post is set, switch to post option of first (should be only) product.
 		if( isset( $_POST[ 'edd-variable-pricing-switcher' ] ) ) {
-			$product = array_shift( edd_get_cart_contents() );
-			$product[ 'options' ][ 'price_id' ] = $_POST[ 'edd-variable-pricing-switcher' ]; // Make this more secure, can we check if this is a valid pricing option?
-			EDD()->session->set( 'edd_cart', array( $product ) );
+
+			$cart = edd_get_cart_contents();
+
+			foreach( $cart as $item_key => $cart_item ) {
+				if( isset( $_POST[ 'edd-variable-pricing-switcher' ][ $cart_item[ 'id' ] ] ) ) {
+					$cart[ $item_key ][ 'options' ][ 'price_id' ] = $_POST[ 'edd-variable-pricing-switcher' ][ $cart_item[ 'id' ] ];
+				}
+			}
+
+			EDD()->session->set( 'edd_cart', $cart );
 		}
 	}
 
@@ -132,7 +139,7 @@ class EDD_Variable_Pricing_Switcher {
 			$item_title = get_the_title( $cart_item[ 'id' ] );
 
 			// Add select box
-			$pricing_switchers .= "<select name='edd-variable-pricing-switcher[{$cart_item[ 'id' ]}]' id='edd-variable-pricing-switcher'>\n";
+			$pricing_switchers .= "<select name='edd-variable-pricing-switcher[{$cart_item[ 'id' ]}]' class='edd-variable-pricing-switcher'>\n";
 				foreach( $pricing_options as $pricing_id => $pricing_option ) {
 					$pricing_switchers .= "<option value='{$pricing_id}'" . ( ( $pricing_id == $cart_item[ 'options' ][ 'price_id' ] ) ? " selected='selected'" : "" ) . ">{$item_title} | {$pricing_option[ 'name' ]} - " . edd_currency_filter( edd_format_amount( $pricing_option[ 'amount' ] ) ) . "</option>\n";
 				}
