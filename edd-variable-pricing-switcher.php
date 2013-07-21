@@ -16,6 +16,8 @@ if ( ! defined( 'EDD_VPS_PLUGIN_FILE' ) ) {
 	define( 'EDD_VPS_PLUGIN_FILE', __FILE__ );
 }
 
+require_once( EDD_VPS_PLUGIN_DIR . '/includes/metabox.php' );
+
 class EDD_Variable_Pricing_Switcher {
 
 	public function __construct() {
