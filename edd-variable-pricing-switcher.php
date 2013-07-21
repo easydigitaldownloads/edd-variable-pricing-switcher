@@ -125,6 +125,12 @@ class EDD_Variable_Pricing_Switcher {
 		$pricing_switchers = '';
 		foreach( $cart as $cart_item ) {
 
+			// Check if variable pricing switcher is enabled for this download
+			$enabled = get_post_meta( $cart_item[ 'id' ], '_edd_vps_enabled', true ) ? true : false;
+			if( ! $enabled ) {
+				continue;
+			}
+
 			// Check if the product has variable prices
 			if( !edd_has_variable_prices( $cart_item[ 'id' ] ) ) {
 				continue;
