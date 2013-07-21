@@ -111,19 +111,36 @@ class EDD_Variable_Pricing_Switcher {
 	public function pricing_switcher() {
 		global $edd_options, $user_ID, $post;
 
-		// Get first item of cart - this plugin only works for 1 product webshops
-		$product = array_shift( edd_get_cart_contents() );
+		$cart = edd_get_cart_contents();
 
-		// This plugin only work with variable pricing enabled
-		if( !edd_has_variable_prices( $product[ 'id' ] ) ) {
-			return;
+		$pricing_switchers = '';
+		foreach( $cart as $cart_item ) {
+
+			// Check if the product has variable prices
+			if( !edd_has_variable_prices( $cart_item[ 'id' ] ) ) {
+				continue;
+			}
+
+			// Get pricing options
+			$pricing_options = edd_get_variable_prices( $cart_item[ 'id' ] );
+
+			// We need more than one pricing option
+			if( count( $pricing_options ) < 2 ) {
+				return;
+			}
+
+			$item_title = get_the_title( $cart_item[ 'id' ] );
+
+			// Add select box
+			$pricing_switchers .= "<select name='edd-variable-pricing-switcher[{$cart_item[ 'id' ]}]' id='edd-variable-pricing-switcher'>\n";
+				foreach( $pricing_options as $pricing_id => $pricing_option ) {
+					$pricing_switchers .= "<option value='{$pricing_id}'" . ( ( $pricing_id == $cart_item[ 'options' ][ 'price_id' ] ) ? " selected='selected'" : "" ) . ">{$item_title} | {$pricing_option[ 'name' ]} - " . edd_currency_filter( edd_format_amount( $pricing_option[ 'amount' ] ) ) . "</option>\n";
+				}
+			$pricing_switchers .= "</select>\n";
+
 		}
 
-		// Get pricing options
-		$pricing_options = edd_get_variable_prices( $product[ 'id' ] );
-
-		// Only show the select box if we have more than 1 pricing option
-		if( count( $pricing_options ) < 2 ) {
+		if( $pricing_switchers == '' ) {
 			return;
 		}
 
@@ -134,13 +151,7 @@ class EDD_Variable_Pricing_Switcher {
 	<form name="edd_variable_pricing_switcher" action="<?php echo edd_get_checkout_uri(); ?>" method="post">
 		<fieldset id="edd_variable_pricing_switcher-fieldset">
 			<legend><?php echo $vps_label; ?></legend>
-			<select name="edd-variable-pricing-switcher" id="edd-variable-pricing-switcher">
-			<?php
-				foreach( $pricing_options as $pricing_id => $pricing_option ) {
-					echo "<option value='{$pricing_id}'" . ( ( $pricing_id == $product[ 'options' ][ 'price_id' ] ) ? " selected='selected'" : "" ) . ">{$pricing_option[ 'name' ]} - " . edd_currency_filter( edd_format_amount( $pricing_option[ 'amount' ] ) ) . "</option>\n";
-				}
-			?>
-			</select>
+			<?php echo $pricing_switchers; ?>
 		</fieldset>
 	</form>
 	<?php
