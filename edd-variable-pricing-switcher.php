@@ -37,9 +37,10 @@ class EDD_Variable_Pricing_Switcher {
 	public function settings( $settings ) {
 		$vps_settings = array(
 			array(
-				'id' => 'vps_settings',
-				'name' => '<strong>' . __('Variable Pricing Switcher Settings', 'edd-vps') . '</strong>',
-				'type' => 'header'
+				'id' 		=> 'vps_settings',
+				'name' 	=> '<strong>' . __('Variable Pricing Switcher Settings', 'edd-vps') . '</strong>',
+				'desc' 	=> '',
+				'type' 	=> 'header'
 			),
 			array(
 				'id'    => 'vps_label',
@@ -50,16 +51,16 @@ class EDD_Variable_Pricing_Switcher {
 				'std' 	=> 'License'
 			),
 			array(
-				'id' => 'vps_disable_cart',
-				'name' => __('Disable cart on checkout page', 'edd-vps'),
-				'desc' => __('Check this to disable the cart on the checkout page.', 'edd-vps'),
-				'type' => 'checkbox'
+				'id' 		=> 'vps_disable_cart',
+				'name' 	=> __('Disable cart on checkout page', 'edd-vps'),
+				'desc' 	=> __('Check this to disable the cart on the checkout page.', 'edd-vps'),
+				'type' 	=> 'checkbox'
 			),
 			array(
-				'id' => 'vps_force_single_variable_price',
-				'name' => __('Force single variable price', 'edd'),
-				'desc' => __('Check this to only allow 1 variable price per product to be bought at once.', 'edd-vps'),
-				'type' => 'checkbox'
+				'id' 		=> 'vps_force_single_variable_price',
+				'name' 	=> __('Force single variable price', 'edd'),
+				'desc' 	=> __('Check this to only allow 1 variable price per product to be bought at once.', 'edd-vps'),
+				'type' 	=> 'checkbox'
 			),
 		);
 
