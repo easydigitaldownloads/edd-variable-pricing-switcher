@@ -67,7 +67,7 @@ class EDD_Variable_Pricing_Switcher {
   	return array_merge( $settings, $vps_settings );
 	}
 
-	public function filter_checkout_cart( $templates, $slug, $name ) {
+	public function filter_checkout_cart( $templates, $slug = "", $name = "" ) {
 		global $edd_options;
 
 		if( isset( $edd_options[ 'vps_disable_cart' ] ) && $edd_options[ 'vps_disable_cart' ] == '1' ) {
