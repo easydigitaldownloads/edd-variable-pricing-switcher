@@ -25,13 +25,17 @@ require_once( EDD_VPS_PLUGIN_DIR . '/includes/metabox.php' );
 
 class EDD_Variable_Pricing_Switcher {
 
-	public function __construct() {
+	const PLUGIN_NAME							= 'Easy Digital Downloads - Variable Pricing Switcher';
+	const PLUGIN_VERSION_NAME 		= '1.0.0';
+	const PLUGIN_VERSION_CODE 		= '1';
+	const PLUGIN_AUTHOR						= 'Barry Kooij';
 
+	public function __construct() {
 		// Load plugin textdomain
 		load_plugin_textdomain( 'edd-vps', false, dirname( plugin_basename( EDD_VPS_PLUGIN_FILE ) ) . '/languages/' );
 
-		// Instantiate the licensing / updater. Must be placed in the main plugin file
-		$license = new EDD_License( __FILE__, 'Extension Name Here', '1.0', 'Your Name' );
+		// Instantiate the licensing / updater.
+		$license = new EDD_License( __FILE__, self::PLUGIN_NAME, self::PLUGIN_VERSION_NAME, self::PLUGIN_AUTHOR );
 
 		// Filters & Hooks
 		add_filter( 'edd_settings_extensions', array( $this, 'settings' ), 1 );
