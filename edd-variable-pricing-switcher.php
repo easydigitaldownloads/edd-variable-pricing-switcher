@@ -16,6 +16,11 @@ if ( ! defined( 'EDD_VPS_PLUGIN_FILE' ) ) {
 	define( 'EDD_VPS_PLUGIN_FILE', __FILE__ );
 }
 
+// Load the EDD license handler only if not already loaded.
+if( ! class_exists( 'EDD_License' ) ) {
+	require_once( EDD_VPS_PLUGIN_DIR . '/includes/EDD_License_Handler.php' );
+}
+
 require_once( EDD_VPS_PLUGIN_DIR . '/includes/metabox.php' );
 
 class EDD_Variable_Pricing_Switcher {
@@ -24,6 +29,9 @@ class EDD_Variable_Pricing_Switcher {
 
 		// Load plugin textdomain
 		load_plugin_textdomain( 'edd-vps', false, dirname( plugin_basename( EDD_VPS_PLUGIN_FILE ) ) . '/languages/' );
+
+		// Instantiate the licensing / updater. Must be placed in the main plugin file
+		$license = new EDD_License( __FILE__, 'Extension Name Here', '1.0', 'Your Name' );
 
 		// Filters & Hooks
 		add_filter( 'edd_settings_extensions', array( $this, 'settings' ), 1 );
