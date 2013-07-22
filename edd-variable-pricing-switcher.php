@@ -43,6 +43,7 @@ class EDD_Variable_Pricing_Switcher {
 		add_action( 'init', array( $this, 'catch_post' ), 11 );
 		add_action( 'init', array( $this, 'force_single_variable_price' ), 10 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		add_action( 'wp_head', array( $this, 'checkout_style' ) );
 		add_action( 'edd_checkout_form_top', array( $this, 'pricing_switcher' ) );
 	}
 
@@ -132,7 +133,15 @@ class EDD_Variable_Pricing_Switcher {
 			return;
 
 		wp_enqueue_script( 'edd-variable-pricing-switcher-js', plugins_url( '/js/edd-variable-pricing-switcher.js' , __FILE__ ) );
-		wp_enqueue_style( 'edd-variable-pricing-switcher-css', plugins_url( '/css/edd-variable-pricing-switcher.css' , __FILE__ ) ); // Maybe just print this css, it's only a few lines
+	}
+
+	public function checkout_style() {
+		global $edd_options, $post;
+
+		if( $post->ID != $edd_options[ 'purchase_page' ] )
+			return;
+
+		echo "<style type='text/css'>.edd-variable-pricing-switcher{width:100%}</style>\n";
 	}
 
 	public function pricing_switcher() {
