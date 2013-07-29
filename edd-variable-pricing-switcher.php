@@ -44,7 +44,7 @@ class EDD_Variable_Pricing_Switcher {
 		add_action( 'init', array( $this, 'force_single_variable_price' ), 10 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'wp_head', array( $this, 'checkout_style' ) );
-		add_action( 'edd_checkout_form_top', array( $this, 'pricing_switcher' ) );
+		add_action( 'edd_checkout_form_top', array( $this, 'checkout_addition' ), 10 );
 	}
 
 	public function settings( $settings ) {
@@ -96,6 +96,7 @@ class EDD_Variable_Pricing_Switcher {
 
 		if( isset( $edd_options[ 'vps_force_single_variable_price' ] ) && $edd_options[ 'vps_force_single_variable_price' ] == '1' ) {
 			$cart = edd_get_cart_contents();
+
 			if( count( $cart ) > 1 ) {
 
 				$temp_cart = array();
@@ -141,10 +142,13 @@ class EDD_Variable_Pricing_Switcher {
 		if( $post->ID != $edd_options[ 'purchase_page' ] )
 			return;
 
-		echo "<style type='text/css'>.edd-variable-pricing-switcher{width:100%}</style>\n";
+		echo "<style type='text/css'>
+			.edd-variable-pricing-switcher{width:100%}
+			#edd_variable_pricing_switcher_discounts span.edd_discount{display:block;width:100%}
+		</style>\n";
 	}
 
-	public function pricing_switcher() {
+	public function checkout_addition() {
 		global $edd_options, $user_ID, $post;
 
 		$cart = edd_get_cart_contents();
@@ -192,12 +196,30 @@ class EDD_Variable_Pricing_Switcher {
 	?>
 	<form name="edd_variable_pricing_switcher" action="<?php echo edd_get_checkout_uri(); ?>" method="post">
 		<fieldset id="edd_variable_pricing_switcher-fieldset">
-			<legend><?php echo $vps_label; ?></legend>
+			<span><legend><?php echo $vps_label; ?></legend></span>
 			<?php echo $pricing_switchers; ?>
 		</fieldset>
 	</form>
-	<?php
 
+	<?php
+		// Only show discount fieldset if the normal cart is disabled
+		if( isset( $edd_options[ 'vps_disable_cart' ] ) && $edd_options[ 'vps_disable_cart' ] == '1' ) {
+	?>
+		<fieldset id="edd_variable_pricing_switcher_discounts"<?php if( ! edd_cart_has_discounts() )  echo ' style="display:none;"'; ?>>
+			<span><legend><?php _e( 'DISCOUNT', 'edd' ); ?></legend></span>
+			<div>
+			<?php
+			if( edd_cart_has_discounts() ) {
+				echo edd_get_cart_discounts_html();
+			}
+			?>
+			</div>
+		</fieldset>
+	<?php
+		}
+	?>
+
+	<?php
 	}
 }
 
