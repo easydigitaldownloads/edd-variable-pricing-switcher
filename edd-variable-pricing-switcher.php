@@ -71,7 +71,7 @@ class EDD_Variable_Pricing_Switcher {
 			),
 			array(
 				'id' 		=> 'vps_force_single_variable_price',
-				'name' 	=> __('Force single variable price', 'edd'),
+				'name' 	=> __('Force single variable price', 'edd-vps'),
 				'desc' 	=> __('Check this to only allow 1 variable price per product to be bought at once.', 'edd-vps'),
 				'type' 	=> 'checkbox'
 			),
