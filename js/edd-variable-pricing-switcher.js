@@ -3,16 +3,17 @@ jQuery(document).ready(function($) {
 		$(this).closest('form').submit();
 	})
 
-	var $target = $('#edd_variable_pricing_switcher_discounts').find('div:first');
+	var $fieldset = $('#edd_variable_pricing_switcher_discounts');
+	var $target 	= $fieldset.find('div:first');
 
-	$('body' ).bind('edd_discount_applied', function(event, discount_response) {
-		$target.css('display', 'block');
+	$('body').bind('edd_discount_applied', function(event, discount_response) {
+		$fieldset.css('display', 'block');
 		$target.html(discount_response.html)
 	});
 
-	$('body' ).bind('edd_discount_removed', function(event, discount_response) {
+	$('body').bind('edd_discount_removed', function(event, discount_response) {
 		if( ! discount_response.discounts ) {
-			$target.css('display', 'none');
+			$fieldset.css('display', 'none');
 		}else {
 			$target.html(discount_response.html)
 		}
