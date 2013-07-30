@@ -167,6 +167,11 @@ class EDD_Variable_Pricing_Switcher {
 				continue;
 			}
 
+			// Fix the price_id option if it doesn't exists
+			if( ! isset( $cart_item[ 'options' ][ 'price_id' ] ) ) {
+				$cart_item[ 'options' ][ 'price_id' ] = 0;
+			}
+
 			// Get pricing options
 			$pricing_options = edd_get_variable_prices( $cart_item[ 'id' ] );
 
