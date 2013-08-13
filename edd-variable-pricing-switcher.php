@@ -3,7 +3,7 @@
 Plugin Name: Easy Digital Downloads - Variable Pricing Switcher
 Plugin URI: http://www.barrykooij.com/edd-checkout-variable-pricing-switcher
 Description: Easy Digital Downloads - Variable Pricing Switcher
-Version: 1.0.0
+Version: 1.0.1
 Author: Barry Kooij
 Author URI: http://www.barrykooij.com/
 */
@@ -44,7 +44,7 @@ class EDD_Variable_Pricing_Switcher {
 		add_action( 'init', array( $this, 'force_single_variable_price' ), 10 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'wp_head', array( $this, 'checkout_style' ) );
-		add_action( 'edd_checkout_form_top', array( $this, 'checkout_addition' ), 10 );
+		add_action( 'edd_before_purchase_form', array( $this, 'checkout_addition' ), 10 );
 	}
 
 	public function settings( $settings ) {
