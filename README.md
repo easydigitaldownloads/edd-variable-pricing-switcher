@@ -3,7 +3,7 @@ edd-variable-pricing-switcher
 
 Easy Digital Downloads - Variable Pricing Switcher
 Barry Kooij - http://www.barrykooij.com
-Version: 1.0.0
+Version: 1.0.1
 EDD Version Required: 1.7.2
 PHP Version Required: 5.2.4 or greater (default WP requirement).
 

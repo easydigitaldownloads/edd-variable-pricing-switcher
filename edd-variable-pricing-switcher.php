@@ -26,8 +26,8 @@ require_once( EDD_VPS_PLUGIN_DIR . '/includes/metabox.php' );
 class EDD_Variable_Pricing_Switcher {
 
 	const PLUGIN_NAME							= 'Variable Pricing Switcher';
-	const PLUGIN_VERSION_NAME 		= '1.0.0';
-	const PLUGIN_VERSION_CODE 		= '1';
+	const PLUGIN_VERSION_NAME 		= '1.0.1';
+	const PLUGIN_VERSION_CODE 		= '2';
 	const PLUGIN_AUTHOR						= 'Barry Kooij';
 
 	public function __construct() {
