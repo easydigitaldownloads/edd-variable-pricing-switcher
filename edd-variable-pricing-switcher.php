@@ -130,7 +130,7 @@ class EDD_Variable_Pricing_Switcher {
 	public function enqueue_scripts() {
 		global $edd_options, $post;
 
-		if( $post->ID != $edd_options[ 'purchase_page' ] )
+		if( ! is_object( $post ) || $post->ID != $edd_options[ 'purchase_page' ] )
 			return;
 
 		wp_enqueue_script( 'edd-variable-pricing-switcher-js', plugins_url( '/js/edd-variable-pricing-switcher.js' , __FILE__ ) );
@@ -139,7 +139,7 @@ class EDD_Variable_Pricing_Switcher {
 	public function checkout_style() {
 		global $edd_options, $post;
 
-		if( $post->ID != $edd_options[ 'purchase_page' ] )
+		if( ! is_object( $post ) || $post->ID != $edd_options[ 'purchase_page' ] )
 			return;
 
 		echo "<style type='text/css'>
