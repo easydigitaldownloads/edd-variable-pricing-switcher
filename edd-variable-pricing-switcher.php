@@ -4,8 +4,8 @@ Plugin Name: Easy Digital Downloads - Variable Pricing Switcher
 Plugin URI: http://www.barrykooij.com/edd-checkout-variable-pricing-switcher
 Description: Easy Digital Downloads - Variable Pricing Switcher
 Version: 1.0.1
-Author: Barry Kooij
-Author URI: http://www.barrykooij.com/
+Author: Easy Digital Downloads
+Author URI: https://easydigitaldownloads.com
 */
 
 if ( ! defined( 'EDD_VPS_PLUGIN_DIR' ) ) {
@@ -20,10 +20,10 @@ require_once( EDD_VPS_PLUGIN_DIR . '/includes/metabox.php' );
 
 class EDD_Variable_Pricing_Switcher {
 
-	const PLUGIN_NAME							= 'Variable Pricing Switcher';
-	const PLUGIN_VERSION_NAME 		= '1.0.1';
-	const PLUGIN_VERSION_CODE 		= '2';
-	const PLUGIN_AUTHOR						= 'Barry Kooij';
+	const PLUGIN_NAME         = 'Variable Pricing Switcher';
+	const PLUGIN_VERSION_NAME = '1.0.1';
+	const PLUGIN_VERSION_CODE = '2';
+	const PLUGIN_AUTHOR       = 'Easy Digital Downloads';
 
 	public function __construct() {
 		// Load plugin textdomain
@@ -72,7 +72,7 @@ class EDD_Variable_Pricing_Switcher {
 			),
 		);
 
-  	return array_merge( $settings, $vps_settings );
+  		return array_merge( $settings, $vps_settings );
 	}
 
 	public function filter_checkout_cart( $templates, $slug = "", $name = "" ) {
