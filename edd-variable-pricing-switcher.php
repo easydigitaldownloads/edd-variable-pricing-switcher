@@ -119,11 +119,17 @@ class EDD_Variable_Pricing_Switcher {
 
 			foreach( $cart as $item_key => $cart_item ) {
 				if( isset( $_POST[ 'edd-variable-pricing-switcher' ][ $cart_item[ 'id' ] ] ) ) {
-					$cart[ $item_key ][ 'options' ][ 'price_id' ] = $_POST[ 'edd-variable-pricing-switcher' ][ $cart_item[ 'id' ] ];
+
+					edd_remove_from_cart( $item_key );
+
+					$options = array();
+					$options['quantity'] = $cart_item['quantity'];
+					$options['price_id'] = absint( $_POST[ 'edd-variable-pricing-switcher' ][ $cart_item[ 'id' ] ] );
+					edd_add_to_cart( $cart_item['id'], $options );
+
 				}
 			}
 
-			EDD()->session->set( 'edd_cart', $cart );
 		}
 	}
 
