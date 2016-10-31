@@ -16,11 +16,6 @@ if ( ! defined( 'EDD_VPS_PLUGIN_FILE' ) ) {
 	define( 'EDD_VPS_PLUGIN_FILE', __FILE__ );
 }
 
-// Load the EDD license handler only if not already loaded.
-if( ! class_exists( 'EDD_License' ) ) {
-	require_once( EDD_VPS_PLUGIN_DIR . '/includes/EDD_License_Handler.php' );
-}
-
 require_once( EDD_VPS_PLUGIN_DIR . '/includes/metabox.php' );
 
 class EDD_Variable_Pricing_Switcher {
