@@ -33,6 +33,7 @@ class EDD_Variable_Pricing_Switcher {
 		$license = new EDD_License( __FILE__, self::PLUGIN_NAME, self::PLUGIN_VERSION_NAME, self::PLUGIN_AUTHOR );
 
 		// Filters & Hooks
+		add_filter( 'edd_settings_sections_extensions', array( $this, 'register_settings_section' ), 10 );
 		add_filter( 'edd_settings_extensions', array( $this, 'settings' ), 1 );
 		add_filter( 'edd_get_template_part', array( $this, 'filter_checkout_cart' ) );
 		add_action( 'init', array( $this, 'catch_post' ), 11 );
@@ -40,6 +41,12 @@ class EDD_Variable_Pricing_Switcher {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'wp_head', array( $this, 'checkout_style' ) );
 		add_action( 'edd_before_purchase_form', array( $this, 'checkout_addition' ), 10 );
+	}
+
+	public function register_settings_section( $sections ) {
+		$sections['vps'] = __( 'Variable Pricing Switcher', 'edd-vps' );
+
+		return $sections;
 	}
 
 	public function settings( $settings ) {
@@ -71,6 +78,10 @@ class EDD_Variable_Pricing_Switcher {
 				'type' 	=> 'checkbox'
 			),
 		);
+
+		if ( version_compare( EDD_VERSION, 2.5, '>=' ) ) {
+			$vps_settings = array( 'vps' => $vps_settings );
+		}
 
   		return array_merge( $settings, $vps_settings );
 	}
