@@ -77,24 +77,25 @@ class EDD_Variable_Pricing_Switcher {
 			),
 		);
 
-  	return array_merge( $settings, $vps_settings );
+  		return array_merge( $settings, $vps_settings );
 	}
 
 	public function filter_checkout_cart( $templates, $slug = "", $name = "" ) {
-		global $edd_options;
 
-		if( isset( $edd_options[ 'vps_disable_cart' ] ) && $edd_options[ 'vps_disable_cart' ] == '1' ) {
-			if( in_array(  'checkout_cart.php', $templates ) )
+		if( edd_get_option( 'vps_disable_cart' ) ) {
+
+			if( in_array(  'checkout_cart.php', $templates ) ) {
 				return array();
+			}
+
 		}
 
 		return $templates;
 	}
 
 	public function force_single_variable_price() {
-		global $edd_options;
 
-		if( isset( $edd_options[ 'vps_force_single_variable_price' ] ) && $edd_options[ 'vps_force_single_variable_price' ] == '1' ) {
+		if( edd_get_option( 'vps_force_single_variable_price' ) ) {
 			$cart = edd_get_cart_contents();
 
 			if( count( $cart ) > 1 ) {
@@ -128,19 +129,21 @@ class EDD_Variable_Pricing_Switcher {
 	}
 
 	public function enqueue_scripts() {
-		global $edd_options, $post;
+		global $post;
 
-		if( ! is_object( $post ) || $post->ID != $edd_options[ 'purchase_page' ] )
+		if( ! is_object( $post ) || $post->ID != edd_get_option( 'purchase_page' ) ) {
 			return;
+		}
 
 		wp_enqueue_script( 'edd-variable-pricing-switcher-js', plugins_url( '/js/edd-variable-pricing-switcher.js' , __FILE__ ) );
 	}
 
 	public function checkout_style() {
-		global $edd_options, $post;
+		global $post;
 
-		if( ! is_object( $post ) || $post->ID != $edd_options[ 'purchase_page' ] )
+		if( ! is_object( $post ) || $post->ID != edd_get_option( 'purchase_page' ) ) {
 			return;
+		}
 
 		echo "<style type='text/css'>
 			.edd-variable-pricing-switcher{width:100%}
@@ -149,7 +152,7 @@ class EDD_Variable_Pricing_Switcher {
 	}
 
 	public function checkout_addition() {
-		global $edd_options, $user_ID, $post;
+		global $user_ID, $post;
 
 		$cart = edd_get_cart_contents();
 
@@ -196,7 +199,7 @@ class EDD_Variable_Pricing_Switcher {
 		}
 
 		// Get label
-		$vps_label = ( ( isset( $edd_options[ 'vps_label' ] ) ) ? $edd_options[ 'vps_label' ] : 'License' );
+		$vps_label = edd_get_option( 'vps_label', 'License' );
 
 	?>
 	<form name="edd_variable_pricing_switcher" action="<?php echo edd_get_checkout_uri(); ?>" method="post">
@@ -208,7 +211,7 @@ class EDD_Variable_Pricing_Switcher {
 
 	<?php
 		// Only show discount fieldset if the normal cart is disabled
-		if( isset( $edd_options[ 'vps_disable_cart' ] ) && $edd_options[ 'vps_disable_cart' ] == '1' ) {
+		if( edd_get_option( 'vps_disable_cart' ) ) {
 	?>
 		<fieldset id="edd_variable_pricing_switcher_discounts"<?php if( ! edd_cart_has_discounts() )  echo ' style="display:none;"'; ?>>
 			<span><legend><?php _e( 'DISCOUNT', 'edd' ); ?></legend></span>
