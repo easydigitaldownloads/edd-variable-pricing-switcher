@@ -4,8 +4,8 @@ Plugin Name: Easy Digital Downloads - Variable Pricing Switcher
 Plugin URI: http://www.barrykooij.com/edd-checkout-variable-pricing-switcher
 Description: Easy Digital Downloads - Variable Pricing Switcher
 Version: 1.0.1
-Author: Barry Kooij
-Author URI: http://www.barrykooij.com/
+Author: Easy Digital Downloads
+Author URI: https://easydigitaldownloads.com
 */
 
 if ( ! defined( 'EDD_VPS_PLUGIN_DIR' ) ) {
@@ -16,19 +16,14 @@ if ( ! defined( 'EDD_VPS_PLUGIN_FILE' ) ) {
 	define( 'EDD_VPS_PLUGIN_FILE', __FILE__ );
 }
 
-// Load the EDD license handler only if not already loaded.
-if( ! class_exists( 'EDD_License' ) ) {
-	require_once( EDD_VPS_PLUGIN_DIR . '/includes/EDD_License_Handler.php' );
-}
-
 require_once( EDD_VPS_PLUGIN_DIR . '/includes/metabox.php' );
 
 class EDD_Variable_Pricing_Switcher {
 
-	const PLUGIN_NAME							= 'Variable Pricing Switcher';
-	const PLUGIN_VERSION_NAME 		= '1.0.1';
-	const PLUGIN_VERSION_CODE 		= '2';
-	const PLUGIN_AUTHOR						= 'Barry Kooij';
+	const PLUGIN_NAME         = 'Variable Pricing Switcher';
+	const PLUGIN_VERSION_NAME = '1.0.1';
+	const PLUGIN_VERSION_CODE = '2';
+	const PLUGIN_AUTHOR       = 'Easy Digital Downloads';
 
 	public function __construct() {
 		// Load plugin textdomain
@@ -38,6 +33,7 @@ class EDD_Variable_Pricing_Switcher {
 		$license = new EDD_License( __FILE__, self::PLUGIN_NAME, self::PLUGIN_VERSION_NAME, self::PLUGIN_AUTHOR );
 
 		// Filters & Hooks
+		add_filter( 'edd_settings_sections_extensions', array( $this, 'register_settings_section' ), 10 );
 		add_filter( 'edd_settings_extensions', array( $this, 'settings' ), 1 );
 		add_filter( 'edd_get_template_part', array( $this, 'filter_checkout_cart' ) );
 		add_action( 'init', array( $this, 'catch_post' ), 11 );
@@ -45,6 +41,12 @@ class EDD_Variable_Pricing_Switcher {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'wp_head', array( $this, 'checkout_style' ) );
 		add_action( 'edd_before_purchase_form', array( $this, 'checkout_addition' ), 10 );
+	}
+
+	public function register_settings_section( $sections ) {
+		$sections['vps'] = __( 'Variable Pricing Switcher', 'edd-vps' );
+
+		return $sections;
 	}
 
 	public function settings( $settings ) {
@@ -76,6 +78,10 @@ class EDD_Variable_Pricing_Switcher {
 				'type' 	=> 'checkbox'
 			),
 		);
+
+		if ( version_compare( EDD_VERSION, 2.5, '>=' ) ) {
+			$vps_settings = array( 'vps' => $vps_settings );
+		}
 
   		return array_merge( $settings, $vps_settings );
 	}
@@ -231,6 +237,7 @@ class EDD_Variable_Pricing_Switcher {
 	}
 }
 
-add_action( 'plugins_loaded', function () {
+function edd_vps_load() {
 	new EDD_Variable_Pricing_Switcher();
-} );
+}
+add_action( 'plugins_loaded', 'edd_vps_load' );
