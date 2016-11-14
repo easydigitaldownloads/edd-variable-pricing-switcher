@@ -244,6 +244,11 @@ class EDD_Variable_Pricing_Switcher {
 }
 
 function edd_vps_load() {
+
+	if( ! function_exists( 'EDD' ) ) {
+		return;
+	}
+
 	new EDD_Variable_Pricing_Switcher();
 }
 add_action( 'plugins_loaded', 'edd_vps_load' );
