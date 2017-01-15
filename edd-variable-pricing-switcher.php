@@ -119,23 +119,26 @@ class EDD_Variable_Pricing_Switcher {
 	}
 
 	public function catch_post() {
+
 		// If Variable pricing switch post is set, switch to post option of first (should be only) product.
 		if( isset( $_POST[ 'edd-variable-pricing-switcher' ] ) ) {
 
 			$cart = edd_get_cart_contents();
 
 			foreach( $cart as $item_key => $cart_item ) {
-				if( isset( $_POST[ 'edd-variable-pricing-switcher' ][ $cart_item[ 'id' ] ] ) ) {
 
-					edd_remove_from_cart( $item_key );
+				$cart_key = edd_get_item_position_in_cart( $cart_item['id'], $cart_item['options'] );
+				edd_remove_from_cart( $cart_key );
 
-					$options = array();
-					$options['quantity'] = $cart_item['quantity'];
-					$options['price_id'] = absint( $_POST[ 'edd-variable-pricing-switcher' ][ $cart_item[ 'id' ] ] );
-					edd_add_to_cart( $cart_item['id'], $options );
+				$options = array();
+				$options['quantity'] = $cart_item['quantity'];
+				$options['price_id'] = absint( $_POST[ 'edd-variable-pricing-switcher' ][ $cart_item[ 'id' ] ] );
 
-				}
+				edd_add_to_cart( $cart_item['id'], $options );
+
 			}
+
+			wp_redirect( edd_get_checkout_uri() ); exit;
 
 		}
 	}
