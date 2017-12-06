@@ -7,7 +7,7 @@
 function edd_vps_add_meta_box() {
 	global $post;
 
-	if( 'bundle' != edd_get_download_type( get_the_ID() ) && edd_has_variable_prices( get_the_ID() ) ) {
+	if( edd_has_variable_prices( get_the_ID() ) ) {
 		add_meta_box( 'edd_vps_box', __( 'Variable Pricing Switcher', 'edd-vps' ), 'edd_vps_render_meta_box', 'download', 'side', 'core' );
 	}
 }
