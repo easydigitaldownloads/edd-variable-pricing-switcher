@@ -216,12 +216,14 @@ class EDD_Variable_Pricing_Switcher {
 		// Get label
 		$vps_label = edd_get_option( 'vps_label', 'License' );
 
+		$discounts = edd_get_cart_discounts();
 	?>
 	<form name="edd_variable_pricing_switcher" action="<?php echo edd_get_checkout_uri(); ?>" method="post">
 		<fieldset id="edd_variable_pricing_switcher-fieldset">
 			<span><legend><?php echo $vps_label; ?></legend></span>
 			<?php echo $pricing_switchers; ?>
 		</fieldset>
+		<input type="hidden" name="discount" id="discount" value="<?php echo ! empty( $discounts[ 0 ] ) ? esc_attr( $discounts[ 0 ] ) : ''; ?>">
 	</form>
 
 	<?php
