@@ -8,7 +8,10 @@ jQuery(document).ready(function($) {
 
 	$('body').bind('edd_discount_applied', function(event, discount_response) {
 		$fieldset.css('display', 'block');
-		$target.html(discount_response.html)
+		$target.html(discount_response.html);
+		if ( discount_response.code ) {
+			$( '#edd_checkout_form_wrap' ).find( 'input[type=hidden]#discount' ).prop( 'value', discount_response.code );
+		}
 	});
 
 	$('body').bind('edd_discount_removed', function(event, discount_response) {
